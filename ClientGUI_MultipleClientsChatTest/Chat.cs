@@ -14,11 +14,11 @@ using System.Xml.Serialization;
 
 namespace ClientGUI_MultipleClientsChatTest
 {
-    public partial class Form1 : Form
+    public partial class Chat : Form
     {
         private Socket senderSocket;
 
-        public Form1()
+        public Chat()
         {
             InitializeComponent();
         }
@@ -79,32 +79,6 @@ namespace ClientGUI_MultipleClientsChatTest
             }
         }
 
-        private void buttonSend_Click(object sender, EventArgs e)
-        {
-            string userMessage = textBox1.Text;  // Get the text from TextBox1
-
-            if (!string.IsNullOrEmpty(userMessage))
-            {
-                byte[] messageSent = Encoding.UTF8.GetBytes(userMessage + "<EOF>");
-                int byteSent = senderSocket.Send(messageSent);
-                textBox1.Clear();  // Clear the TextBox after sending the message
-
-                // Optionally, display the sent message in the richTextBox
-                addTrailingTextToTextBox("You: " + userMessage);
-
-                // If user types "exit", close the application
-                if (userMessage.ToLower() == "exit")
-                {
-                    this.Close();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please enter a message.");
-            }
-        }
-
-
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
 
@@ -126,6 +100,8 @@ namespace ClientGUI_MultipleClientsChatTest
                 // If user types "exit", close the application
                 if (userMessage.ToLower() == "exit")
                 {
+                    senderSocket.Shutdown(SocketShutdown.Both);
+                    senderSocket.Close();
                     this.Close();
                 }
             }
