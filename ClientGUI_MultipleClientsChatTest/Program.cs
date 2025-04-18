@@ -20,9 +20,9 @@ namespace ClientGUI_MultipleClientsChatTest
         [STAThread]
         static void Main()
         {
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
             chat = new Chat();
 
             Thread graphicsThread = new Thread(() => Application.Run(chat));

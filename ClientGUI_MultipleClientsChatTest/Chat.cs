@@ -33,6 +33,11 @@ namespace ClientGUI_MultipleClientsChatTest
             
         }
 
+        private void Form1_Close(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0); 
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             string userMessage = textBox1.Text;  // Get the text from TextBox1
