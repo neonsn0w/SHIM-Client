@@ -26,6 +26,9 @@ namespace ClientGUI_MultipleClientsChatTest
         public void addTrailingTextToTextBox(string text)
         {
             richTextBox1.Text = richTextBox1.Text + text + "\n";
+            // moves the cursor to the end of the textbox and scrolls to the position of the cursor
+            richTextBox1.SelectionStart = richTextBox1.Text.Length;
+            richTextBox1.ScrollToCaret();
         }
 
         private void Form1_Load(object sender, EventArgs e)
