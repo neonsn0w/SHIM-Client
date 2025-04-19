@@ -16,8 +16,6 @@ namespace ClientGUI_MultipleClientsChatTest
 {
     public partial class Chat : Form
     {
-        
-
         public Chat()
         {
             InitializeComponent();
@@ -33,7 +31,8 @@ namespace ClientGUI_MultipleClientsChatTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            MainList mainList = new MainList();
+            mainList.Show();
         }
 
         private void Form1_Close(object sender, FormClosingEventArgs e)

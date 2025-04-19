@@ -43,12 +43,15 @@ namespace ClientGUI_MultipleClientsChatTest
                     Thread clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();
 
-                    chat.addTrailingTextToTextBox("Socket connected to -> " + senderSocket.RemoteEndPoint.ToString());
+                    // Invoke is required to avoid cross-thread operation exception
+                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Socket connected to -> " + senderSocket.RemoteEndPoint.ToString())));
 
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    MessageBox.Show("FATAL ERROR, SHUTTING DOWN\n\n" + ex.Message, "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(0);
                 }
             }
             catch (Exception ex)
@@ -56,8 +59,6 @@ namespace ClientGUI_MultipleClientsChatTest
                 Console.WriteLine(ex.ToString());
             }
         }
-
-        
 
         public static void readMessages(Socket reader)
         {
