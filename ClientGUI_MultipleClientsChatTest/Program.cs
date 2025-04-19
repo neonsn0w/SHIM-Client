@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Text;
+using System.IO;
 
 namespace ClientGUI_MultipleClientsChatTest
 {
@@ -14,12 +15,20 @@ namespace ClientGUI_MultipleClientsChatTest
     {
         public static Socket senderSocket;
         private static Chat chat;
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+
+        public static string publicKey;
+        public static string privateKey;
+
+        // This variable is used to check the keys have been just generated
+        // and if it's necessary to send the public key to the server
+        private static bool needSetup = false;
+
         [STAThread]
         static void Main()
         {
+
+            cryptographySetup();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -44,7 +53,7 @@ namespace ClientGUI_MultipleClientsChatTest
                     clientThread.Start();
 
                     // Invoke is required to avoid cross-thread operation exception
-                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Socket connected to -> " + senderSocket.RemoteEndPoint.ToString())));
+                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Socket connected to -> " + senderSocket.RemoteEndPoint.ToString() + Environment.NewLine)));
 
                 }
                 catch (Exception ex)
@@ -79,6 +88,31 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 Console.WriteLine("Exception: " + e.Message);
             }
+        }
+
+        public static void cryptographySetup()
+        {
+            try
+            {
+                var x = CryptoTools.LoadKeys();
+                publicKey = x.publicKey;
+                privateKey = x.privateKey;
+            }
+            catch (FileNotFoundException fne)
+            {
+                CryptoTools.GenerateAndSaveKeys();
+                var x = CryptoTools.LoadKeys();
+                publicKey = x.publicKey;
+                privateKey = x.privateKey;
+                needSetup = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+                MessageBox.Show("FATAL ERROR, SHUTTING DOWN\n\n" + e.Message, "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
+
         }
     }
 }
