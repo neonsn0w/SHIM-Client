@@ -48,7 +48,17 @@ namespace ClientGUI_MultipleClientsChatTest
                 {
                     senderSocket.Connect(localEndPoint);
 
-                    
+                    // Send the public key to the server
+                    byte[] messageSent = Encoding.UTF8.GetBytes("setpubkey " + publicKey);
+                    int byteSent = Program.senderSocket.Send(messageSent);
+
+                    readMessage(senderSocket);
+
+                    // Send the nickname to the server
+                    messageSent = Encoding.UTF8.GetBytes("setnickname neonsn0w");
+                    byteSent = Program.senderSocket.Send(messageSent); 
+
+                    readMessage(senderSocket);
 
                     Thread clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();
