@@ -46,7 +46,7 @@ namespace ClientGUI_MultipleClientsChatTest
 
             if (!string.IsNullOrEmpty(userMessage))
             {
-                byte[] messageSent = Encoding.UTF8.GetBytes(userMessage + "<EOF>");
+                byte[] messageSent = Encoding.UTF8.GetBytes(userMessage);
                 int byteSent = Program.senderSocket.Send(messageSent);
                 textBox1.Clear();  // Clear the TextBox after sending the message
 

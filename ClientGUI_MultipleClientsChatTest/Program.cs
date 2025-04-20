@@ -26,7 +26,6 @@ namespace ClientGUI_MultipleClientsChatTest
         [STAThread]
         static void Main()
         {
-
             cryptographySetup();
 
             Application.EnableVisualStyles();
@@ -49,6 +48,8 @@ namespace ClientGUI_MultipleClientsChatTest
                 {
                     senderSocket.Connect(localEndPoint);
 
+                    
+
                     Thread clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();
 
@@ -66,6 +67,24 @@ namespace ClientGUI_MultipleClientsChatTest
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+            }
+        }
+
+        public static void readMessage(Socket reader)
+        {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            try
+            {
+                bytesRead = reader.Receive(buffer);
+                string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                Console.WriteLine(message);
+                chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
             }
         }
 
