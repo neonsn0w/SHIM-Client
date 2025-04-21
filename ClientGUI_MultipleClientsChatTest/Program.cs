@@ -60,6 +60,12 @@ namespace ClientGUI_MultipleClientsChatTest
 
                     readMessage(senderSocket);
 
+                    // Send the nickname to the server
+                    messageSent = Encoding.UTF8.GetBytes("updatedb");
+                    byteSent = Program.senderSocket.Send(messageSent);
+
+                    readMessage(senderSocket);
+
                     Thread clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();
 
@@ -89,8 +95,8 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 bytesRead = reader.Receive(buffer);
                 string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                Console.WriteLine(message);
-                chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
+                //Console.WriteLine(message);
+                // chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
             }
             catch (Exception e)
             {
