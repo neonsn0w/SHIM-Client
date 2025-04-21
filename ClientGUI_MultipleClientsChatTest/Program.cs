@@ -9,12 +9,20 @@ using System.Threading;
 using System.Text;
 using System.IO;
 
+// I really didn't want to do this, but I need to use the InputBox...
+// using Microsoft.VisualBasic;
+
+// I ACTUALLY DONT NEED IT ANYMORE YES!!! GODOOOOOO!!!!!!!!
+
 namespace ClientGUI_MultipleClientsChatTest
 {
     internal static class Program
     {
         public static Socket senderSocket;
         private static Chat chat;
+        private static UsernameInput usernameInput;
+
+        public static string username = ""; // neonsn0w!
 
         public static string publicKey;
         public static string privateKey;
@@ -27,11 +35,21 @@ namespace ClientGUI_MultipleClientsChatTest
         static void Main()
         {
             cryptographySetup();
-
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             chat = new Chat();
+            usernameInput = new UsernameInput();
+
+            Application.Run(usernameInput);
+
+            if (username == "")
+            {
+                // If the user didn't enter a username, we need to hurt his feelings
+                MessageBox.Show("This username is ass. Session terminated.", "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+            }
 
             Thread graphicsThread = new Thread(() => Application.Run(chat));
             graphicsThread.Start();
@@ -55,12 +73,12 @@ namespace ClientGUI_MultipleClientsChatTest
                     readMessage(senderSocket);
 
                     // Send the nickname to the server
-                    messageSent = Encoding.UTF8.GetBytes("setnickname neonsn0w");
+                    messageSent = Encoding.UTF8.GetBytes($"setnick {username}");
                     byteSent = Program.senderSocket.Send(messageSent); 
 
                     readMessage(senderSocket);
 
-                    // Send the nickname to the server
+                    // update the database
                     messageSent = Encoding.UTF8.GetBytes("updatedb");
                     byteSent = Program.senderSocket.Send(messageSent);
 
@@ -70,7 +88,7 @@ namespace ClientGUI_MultipleClientsChatTest
                     clientThread.Start();
 
                     // Invoke is required to avoid cross-thread operation exception
-                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Socket connected to -> " + senderSocket.RemoteEndPoint.ToString() + Environment.NewLine)));
+                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Connected to this server's public pool.\nMessages here are not encrypted")));
 
                 }
                 catch (Exception ex)

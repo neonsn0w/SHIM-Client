@@ -50,12 +50,6 @@ namespace ClientGUI_MultipleClientsChatTest
             this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 20;
-            this.listBox1.Items.AddRange(new object[] {
-            "meow",
-            "haii",
-            ":33",
-            "hewwo",
-            ">w<"});
             this.listBox1.Location = new System.Drawing.Point(13, 53);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(357, 484);
