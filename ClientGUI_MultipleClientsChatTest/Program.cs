@@ -8,11 +8,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Text;
 using System.IO;
-
-// I really didn't want to do this, but I need to use the InputBox...
-// using Microsoft.VisualBasic;
-
-// I ACTUALLY DONT NEED IT ANYMORE YES!!! GODOOOOOO!!!!!!!!
+using System.Collections.Concurrent;
 
 namespace ClientGUI_MultipleClientsChatTest
 {
@@ -22,11 +18,16 @@ namespace ClientGUI_MultipleClientsChatTest
         private static Chat chat;
         private static UsernameInput usernameInput;
 
+        public static ConcurrentDictionary<string, string> connectedUsers = new ConcurrentDictionary<string, string>();
+
         public static string username = ""; // neonsn0w!
 
         public static string publicKey;
         public static string privateKey;
 
+        private static Thread clientThread;
+
+        // TODO: Check if this is necessary
         // This variable is used to check the keys have been just generated
         // and if it's necessary to send the public key to the server
         private static bool needSetup = false;
@@ -44,7 +45,9 @@ namespace ClientGUI_MultipleClientsChatTest
 
             Application.Run(usernameInput);
 
-            if (username == "")
+            username = username.Replace("§", "ss");
+
+            if (username.Trim() == "")
             {
                 // If the user didn't enter a username, we need to hurt his feelings
                 MessageBox.Show("This username is ass. Session terminated.", "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -84,11 +87,11 @@ namespace ClientGUI_MultipleClientsChatTest
 
                     readMessage(senderSocket);
 
-                    Thread clientThread = new Thread(() => readMessages(senderSocket));
+                    clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();
 
                     // Invoke is required to avoid cross-thread operation exception
-                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Connected to this server's public pool.\nMessages here are not encrypted")));
+                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Connected to this server's public pool.\nMessages here are not encrypted\n")));
 
                 }
                 catch (Exception ex)
@@ -104,7 +107,34 @@ namespace ClientGUI_MultipleClientsChatTest
             }
         }
 
-        public static void readMessage(Socket reader)
+        public static void askUserListUpdate()
+        {
+            byte[] messageSent = Encoding.UTF8.GetBytes("getusers");
+            int byteSent = Program.senderSocket.Send(messageSent);
+        }
+
+        public static void updateUserList(string serverResponse)
+        {
+            string[] users = serverResponse.Split('\n');
+
+            foreach (string user in users)
+            {
+                if (user.Trim() != "")
+                {
+                    string[] userInfo = user.Split('§');
+
+                    // If I uncomment this, I will https://learn.microsoft.com/en-us/windows-server/get-started/kms-client-activation-keys
+                    /*if (userInfo[1] == publicKey)
+                    {
+                        continue;
+                    }*/
+
+                    connectedUsers.TryAdd(userInfo[1], userInfo[0]);
+                }
+            }
+        }
+
+        public static string readMessage(Socket reader)
         {
             byte[] buffer = new byte[1024];
             int bytesRead;
@@ -113,12 +143,15 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 bytesRead = reader.Receive(buffer);
                 string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                //Console.WriteLine(message);
+                // Console.WriteLine(message);
                 // chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
+
+                return message;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
+                return e.Message;
             }
         }
 
@@ -134,7 +167,14 @@ namespace ClientGUI_MultipleClientsChatTest
                     bytesRead = reader.Receive(buffer);
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                     Console.WriteLine(message);
-                    chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
+                    if (message.StartsWith("§§§USERLIST§§§"))
+                    {
+                        updateUserList(message.Substring(14));
+                    }
+                    else
+                    {
+                        chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
+                    }
                 }
             }
             catch (Exception e)

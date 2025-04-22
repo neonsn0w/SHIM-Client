@@ -16,6 +16,8 @@ namespace ClientGUI_MultipleClientsChatTest
 {
     public partial class Chat : Form
     {
+        public MainList mainList;
+
         public Chat()
         {
             InitializeComponent();
@@ -31,7 +33,7 @@ namespace ClientGUI_MultipleClientsChatTest
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            MainList mainList = new MainList();
+            mainList = new MainList();
             mainList.Show();
         }
 
@@ -42,7 +44,7 @@ namespace ClientGUI_MultipleClientsChatTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string userMessage = textBox1.Text;  // Get the text from TextBox1
+            string userMessage = textBox1.Text.Trim().Replace("§", "ss");  // Get the text from TextBox1
 
             if (!string.IsNullOrEmpty(userMessage))
             {
