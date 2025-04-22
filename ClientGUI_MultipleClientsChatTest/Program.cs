@@ -138,7 +138,7 @@ namespace ClientGUI_MultipleClientsChatTest
 
         public static string readMessage(Socket reader)
         {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[65536];
             int bytesRead;
 
             try
@@ -159,7 +159,7 @@ namespace ClientGUI_MultipleClientsChatTest
 
         public static void readMessages(Socket reader)
         {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[65536];
             int bytesRead;
 
             try
