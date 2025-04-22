@@ -93,6 +93,7 @@ namespace ClientGUI_MultipleClientsChatTest
                     // Invoke is required to avoid cross-thread operation exception
                     chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Connected to this server's public pool.\nMessages here are not encrypted\n")));
 
+                    askUserListUpdate();
                 }
                 catch (Exception ex)
                 {
@@ -132,6 +133,7 @@ namespace ClientGUI_MultipleClientsChatTest
                     connectedUsers.TryAdd(userInfo[1], userInfo[0]);
                 }
             }
+            chat.mainList.Invoke(new Action(() => chat.mainList.updateListBox()));
         }
 
         public static string readMessage(Socket reader)

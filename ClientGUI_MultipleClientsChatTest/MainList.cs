@@ -22,7 +22,6 @@ namespace ClientGUI_MultipleClientsChatTest
         private void updateConnectedUserDict()
         {
             Program.askUserListUpdate();
-            updateListBox();
         }
 
         public MainList()
