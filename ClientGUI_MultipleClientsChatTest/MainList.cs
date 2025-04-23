@@ -46,10 +46,10 @@ namespace ClientGUI_MultipleClientsChatTest
                 string[] data = selectedUser.Split('§');
 
                 DirectChat directChat = new DirectChat(data[1], data[0]);
-                Program.DMs.TryAdd(data[0], directChat);
+                Program.DMs.TryAdd(data[1].Trim(), directChat);
 
                 Thread directChatThread = new Thread(() => directChat.ShowDialog());
-                Program.directChatThreads.TryAdd(data[0], directChatThread);
+                Program.directChatThreads.TryAdd(data[1], directChatThread);
                 directChatThread.Start();
             }
         }

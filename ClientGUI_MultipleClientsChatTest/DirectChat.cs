@@ -25,13 +25,14 @@ namespace ClientGUI_MultipleClientsChatTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string userMessage = textBox1.Text.Trim().Replace("§", "ss");  // Get the text from TextBox1
+            string userMessage = textBox1.Text.Trim().Replace("§", "ss");  // Get the text from TextBox1  
 
             if (!string.IsNullOrEmpty(userMessage))
             {
-                byte[] messageSent = Encoding.UTF8.GetBytes($"dm {publickey}§{CryptoTools.Encrypt(userMessage, publickey)}");
+                byte[] messageSent = Encoding.UTF8.GetBytes($"dm {publickey}§{Convert.ToBase64String(CryptoTools.Encrypt(userMessage, publickey))}");
+
                 int byteSent = Program.senderSocket.Send(messageSent);
-                textBox1.Clear();  // Clear the TextBox after sending the message
+                textBox1.Clear();  // Clear the TextBox after sending the message  
 
                 richTextBox1.AppendText(Program.username + ": ", Color.Blue);
                 richTextBox1.AppendText(userMessage + "\n");

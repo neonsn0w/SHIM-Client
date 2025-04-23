@@ -40,6 +40,7 @@ namespace ClientGUI_MultipleClientsChatTest
             // 
             // richTextBox1
             // 
+            this.richTextBox1.Font = new System.Drawing.Font("Times New Roman", 12F);
             this.richTextBox1.Location = new System.Drawing.Point(13, 78);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(812, 435);
@@ -71,6 +72,7 @@ namespace ClientGUI_MultipleClientsChatTest
             this.button1.TabIndex = 3;
             this.button1.Text = "Send";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 

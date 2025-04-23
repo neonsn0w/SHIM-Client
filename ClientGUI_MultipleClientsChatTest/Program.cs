@@ -9,6 +9,7 @@ using System.Threading;
 using System.Text;
 using System.IO;
 using System.Collections.Concurrent;
+using System.Drawing;
 
 namespace ClientGUI_MultipleClientsChatTest
 {
@@ -185,7 +186,7 @@ namespace ClientGUI_MultipleClientsChatTest
                         string[] userInfo = message.Substring(3).Split('§');
                         if (!DMs.ContainsKey(userInfo[0]))
                         {
-                            DirectChat directChat = new DirectChat(userInfo[0], userInfo[1]);
+                            DirectChat directChat = new DirectChat(userInfo[0], userInfo[2]);
                             DMs.TryAdd(userInfo[0], directChat);
 
                             // Create a thread for the DirectChat instance  
@@ -196,7 +197,8 @@ namespace ClientGUI_MultipleClientsChatTest
 
                         else
                         {
-                            DMs[userInfo[0]].Invoke(new Action(() => DMs[userInfo[0]].richTextBox1.AppendText(userInfo[1])));
+                            DMs[userInfo[0]].Invoke(new Action(() => DMs[userInfo[0]].richTextBox1.AppendText(userInfo[2] + ": ", Color.Red)));
+                            DMs[userInfo[0]].Invoke(new Action(() => DMs[userInfo[0]].richTextBox1.AppendText(CryptoTools.Decrypt(Convert.FromBase64String(userInfo[1]), privateKey) + '\n')));
                         }
                     }
                     else
