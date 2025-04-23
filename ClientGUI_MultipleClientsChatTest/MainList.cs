@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ClientGUI_MultipleClientsChatTest
@@ -14,7 +15,8 @@ namespace ClientGUI_MultipleClientsChatTest
                 listBox1.Items.Clear();
                 foreach (var user in Program.connectedUsers)
                 {
-                    listBox1.Items.Add(user.Value);
+                    // Mi vergogno dei miei peccati...
+                    listBox1.Items.Add(user.Value + "\t\t\t\t\t" + user.Key);
                 }
             }
         }
@@ -39,7 +41,16 @@ namespace ClientGUI_MultipleClientsChatTest
         {
             if (listBox1.SelectedItem != null)
             {
-                MessageBox.Show(listBox1.SelectedItem.ToString());
+                // MessageBox.Show(listBox1.SelectedItem.ToString());
+                selectedUser = listBox1.SelectedItem.ToString().Replace("\t\t\t\t\t", "§");
+                string[] data = selectedUser.Split('§');
+
+                DirectChat directChat = new DirectChat(data[0], data[1]);
+                Program.DMs.TryAdd(data[0], directChat);
+
+                Thread directChatThread = new Thread(() => directChat.ShowDialog());
+                Program.directChatThreads.TryAdd(data[0], directChatThread);
+                directChatThread.Start();
             }
         }
 

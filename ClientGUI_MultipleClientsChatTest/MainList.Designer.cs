@@ -77,7 +77,7 @@ namespace ClientGUI_MultipleClientsChatTest
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label1);
             this.Name = "MainList";
-            this.Text = "MainList";
+            this.Text = "Connected Users";
             this.ResumeLayout(false);
             this.PerformLayout();
 

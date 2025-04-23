@@ -23,7 +23,7 @@ namespace ClientGUI_MultipleClientsChatTest
         public static ConcurrentDictionary<string, DirectChat> DMs = new ConcurrentDictionary<string, DirectChat>();
 
         // Thread pool for DirectChat threads  
-        private static ConcurrentDictionary<string, Thread> directChatThreads = new ConcurrentDictionary<string, Thread>();
+        public static ConcurrentDictionary<string, Thread> directChatThreads = new ConcurrentDictionary<string, Thread>();
 
         public static string username = ""; // neonsn0w!  
 
