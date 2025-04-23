@@ -45,7 +45,7 @@ namespace ClientGUI_MultipleClientsChatTest
                 selectedUser = listBox1.SelectedItem.ToString().Replace("\t\t\t\t\t", "§");
                 string[] data = selectedUser.Split('§');
 
-                DirectChat directChat = new DirectChat(data[0], data[1]);
+                DirectChat directChat = new DirectChat(data[1], data[0]);
                 Program.DMs.TryAdd(data[0], directChat);
 
                 Thread directChatThread = new Thread(() => directChat.ShowDialog());

@@ -14,6 +14,8 @@ namespace ClientGUI_MultipleClientsChatTest
         public DirectChat(string publickey, string username)
         {
             InitializeComponent();
+            this.publickey = publickey;
+            this.username = username;
         }
 
         private void DirectChat_Load(object sender, System.EventArgs e)
