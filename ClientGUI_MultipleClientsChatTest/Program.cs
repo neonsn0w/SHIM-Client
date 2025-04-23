@@ -18,25 +18,30 @@ namespace ClientGUI_MultipleClientsChatTest
         private static Chat chat;
         private static UsernameInput usernameInput;
 
+        // Format: publickey + username  
         public static ConcurrentDictionary<string, string> connectedUsers = new ConcurrentDictionary<string, string>();
+        public static ConcurrentDictionary<string, DirectChat> DMs = new ConcurrentDictionary<string, DirectChat>();
 
-        public static string username = ""; // neonsn0w!
+        // Thread pool for DirectChat threads  
+        private static ConcurrentDictionary<string, Thread> directChatThreads = new ConcurrentDictionary<string, Thread>();
+
+        public static string username = ""; // neonsn0w!  
 
         public static string publicKey;
         public static string privateKey;
 
         private static Thread clientThread;
 
-        // TODO: Check if this is necessary
-        // This variable is used to check the keys have been just generated
-        // and if it's necessary to send the public key to the server
+        // TODO: Check if this is necessary  
+        // This variable is used to check the keys have been just generated  
+        // and if it's necessary to send the public key to the server  
         private static bool needSetup = false;
 
         [STAThread]
         static void Main()
         {
             cryptographySetup();
-            
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -49,7 +54,7 @@ namespace ClientGUI_MultipleClientsChatTest
 
             if (username.Trim() == "")
             {
-                // If the user didn't enter a username, we need to hurt his feelings
+                // If the user didn't enter a username, we need to hurt his feelings  
                 MessageBox.Show("This username is ass. Session terminated.", "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
@@ -69,19 +74,19 @@ namespace ClientGUI_MultipleClientsChatTest
                 {
                     senderSocket.Connect(localEndPoint);
 
-                    // Send the public key to the server
+                    // Send the public key to the server  
                     byte[] messageSent = Encoding.UTF8.GetBytes("setpubkey " + publicKey);
                     int byteSent = Program.senderSocket.Send(messageSent);
 
                     readMessage(senderSocket);
 
-                    // Send the nickname to the server
+                    // Send the nickname to the server  
                     messageSent = Encoding.UTF8.GetBytes($"setnick {username}");
-                    byteSent = Program.senderSocket.Send(messageSent); 
+                    byteSent = Program.senderSocket.Send(messageSent);
 
                     readMessage(senderSocket);
 
-                    // update the database
+                    // update the database  
                     messageSent = Encoding.UTF8.GetBytes("updatedb");
                     byteSent = Program.senderSocket.Send(messageSent);
 
@@ -90,7 +95,7 @@ namespace ClientGUI_MultipleClientsChatTest
                     clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();
 
-                    // Invoke is required to avoid cross-thread operation exception
+                    // Invoke is required to avoid cross-thread operation exception  
                     chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText("Connected to this server's public pool.\nMessages here are not encrypted\n")));
 
                     askUserListUpdate();
@@ -122,14 +127,16 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 if (user.Trim() != "")
                 {
+                    // Format: "username§publickey"  
                     string[] userInfo = user.Split('§');
 
-                    // If I uncomment this, I will https://learn.microsoft.com/en-us/windows-server/get-started/kms-client-activation-keys
-                    /*if (userInfo[1] == publicKey)
-                    {
-                        continue;
+                    // If I uncomment this, I will https://learn.microsoft.com/en-us/windows-server/get-started/kms-client-activation-keys  
+                    /*if (userInfo[1] == publicKey)  
+                    {  
+                        continue;  
                     }*/
 
+                    // Format: publickey + username  
                     connectedUsers.TryAdd(userInfo[1], userInfo[0]);
                 }
             }
@@ -145,8 +152,8 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 bytesRead = reader.Receive(buffer);
                 string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                // Console.WriteLine(message);
-                // chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
+                // Console.WriteLine(message);  
+                // chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));  
 
                 return message;
             }
@@ -172,6 +179,25 @@ namespace ClientGUI_MultipleClientsChatTest
                     if (message.StartsWith("§§§USERLIST§§§"))
                     {
                         updateUserList(message.Substring(14));
+                    }
+                    else if (message.StartsWith("md "))
+                    {
+                        string[] userInfo = message.Substring(3).Split('§');
+                        if (!DMs.ContainsKey(userInfo[0]))
+                        {
+                            DirectChat directChat = new DirectChat(userInfo[0], userInfo[1]);
+                            DMs.TryAdd(userInfo[0], directChat);
+
+                            // Create a thread for the DirectChat instance  
+                            Thread directChatThread = new Thread(() => directChat.ShowDialog());
+                            directChatThreads.TryAdd(userInfo[0], directChatThread);
+                            directChatThread.Start();
+                        }
+
+                        else
+                        {
+                            DMs[userInfo[0]].Invoke(new Action(() => DMs[userInfo[0]].richTextBox1.AppendText(userInfo[1])));
+                        }
                     }
                     else
                     {
@@ -207,7 +233,6 @@ namespace ClientGUI_MultipleClientsChatTest
                 MessageBox.Show("FATAL ERROR, SHUTTING DOWN\n\n" + e.Message, "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
-
         }
     }
 }

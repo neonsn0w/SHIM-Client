@@ -53,6 +53,12 @@
       <DependentUpon>Chat.cs</DependentUpon>
     </Compile>
     <Compile Include="CryptoTools.cs" />
+    <Compile Include="DirectChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DirectChat.Designer.cs">
+      <DependentUpon>DirectChat.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +67,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RichTextBoxExtensions.cs" />
     <Compile Include="UsernameInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +76,9 @@
     </Compile>
     <EmbeddedResource Include="Chat.resx">
       <DependentUpon>Chat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DirectChat.resx">
+      <DependentUpon>DirectChat.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainList.resx">
       <DependentUpon>MainList.cs</DependentUpon>

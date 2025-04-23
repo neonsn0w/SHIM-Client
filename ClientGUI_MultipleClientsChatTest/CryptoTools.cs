@@ -36,13 +36,13 @@ namespace ClientGUI_MultipleClientsChatTest
             }
         }
 
-        public static byte[] Encrypt(string message, string publicKey)
+        public static string Encrypt(string message, string publicKey)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
             {
                 rsa.FromXmlString(publicKey); // Load the public key
                 byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-                return rsa.Encrypt(messageBytes, false); // Encrypt with PKCS#1 v1.5 padding
+                return rsa.Encrypt(messageBytes, false).ToString(); // Encrypt with PKCS#1 v1.5 padding
             }
         }
 

@@ -52,10 +52,9 @@ namespace ClientGUI_MultipleClientsChatTest
                 int byteSent = Program.senderSocket.Send(messageSent);
                 textBox1.Clear();  // Clear the TextBox after sending the message
 
-                // Optionally, display the sent message in the richTextBox
-                addTrailingTextToTextBox("You: " + userMessage);
+                richTextBox1.AppendText(Program.username + ": ", Color.Blue);
+                richTextBox1.AppendText(userMessage + "\n");
 
-                // If user types "exit", close the application
                 if (userMessage.ToLower() == "exit")
                 {
                     Program.senderSocket.Shutdown(SocketShutdown.Both);

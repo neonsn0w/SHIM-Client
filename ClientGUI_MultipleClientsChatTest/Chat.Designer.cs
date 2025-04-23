@@ -78,7 +78,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Chat";
-            this.Text = "Chat";
+            this.Text = "SHIM - Public chat";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Close);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
