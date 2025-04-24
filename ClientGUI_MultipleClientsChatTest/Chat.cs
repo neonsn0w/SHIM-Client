@@ -23,14 +23,6 @@ namespace ClientGUI_MultipleClientsChatTest
             InitializeComponent();
         }
 
-        public void addTrailingTextToTextBox(string text)
-        {
-            richTextBox1.Text = richTextBox1.Text + text + "\n";
-            // moves the cursor to the end of the textbox and scrolls to the position of the cursor
-            richTextBox1.SelectionStart = richTextBox1.Text.Length;
-            richTextBox1.ScrollToCaret();
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             mainList = new MainList();
@@ -44,13 +36,13 @@ namespace ClientGUI_MultipleClientsChatTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string userMessage = textBox1.Text.Trim().Replace("§", "ss");  // Get the text from TextBox1
+            string userMessage = textBox1.Text.Trim().Replace("§", "ss");  // Get the text from TextBox1  
 
             if (!string.IsNullOrEmpty(userMessage))
             {
-                byte[] messageSent = Encoding.UTF8.GetBytes(userMessage);
+                byte[] messageSent = Encoding.UTF8.GetBytes("broadcast " + userMessage);
                 int byteSent = Program.senderSocket.Send(messageSent);
-                textBox1.Clear();  // Clear the TextBox after sending the message
+                textBox1.Clear();  // Clear the TextBox after sending the message  
 
                 richTextBox1.AppendText(Program.username + ": ", Color.Blue);
                 richTextBox1.AppendText(userMessage + "\n");
@@ -66,6 +58,13 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 MessageBox.Show("Please enter a message.");
             }
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            // Automatically scroll to the bottom  
+            richTextBox1.SelectionStart = richTextBox1.Text.Length;
+            richTextBox1.ScrollToCaret();
         }
     }
 }
