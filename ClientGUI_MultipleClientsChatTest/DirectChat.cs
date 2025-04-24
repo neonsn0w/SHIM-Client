@@ -18,6 +18,12 @@ namespace ClientGUI_MultipleClientsChatTest
             this.username = username;
         }
 
+        private void updateTextBoxColor()
+        {
+            // Set the color of the TextBox to the selected color from the ColorDialog  
+            textBox1.ForeColor = colorDialog1.Color;
+        }
+
         private void DirectChat_Load(object sender, System.EventArgs e)
         {
             label1.Text = username;
@@ -29,13 +35,13 @@ namespace ClientGUI_MultipleClientsChatTest
 
             if (!string.IsNullOrEmpty(userMessage))
             {
-                byte[] messageSent = Encoding.UTF8.GetBytes($"dm {publickey}§{Convert.ToBase64String(CryptoTools.Encrypt(userMessage, publickey))}");
+                byte[] messageSent = Encoding.UTF8.GetBytes($"dm {publickey}§{Convert.ToBase64String(CryptoTools.Encrypt(userMessage, publickey))}§{colorDialog1.Color.ToArgb()}");
 
                 int byteSent = Program.senderSocket.Send(messageSent);
                 textBox1.Clear();  // Clear the TextBox after sending the message  
 
                 richTextBox1.AppendText(Program.username + ": ", Color.Blue);
-                richTextBox1.AppendText(userMessage + "\n");
+                richTextBox1.AppendText(userMessage + "\n", colorDialog1.Color);
 
                 SoundTools.playIMSendSound();
 
@@ -50,6 +56,12 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 MessageBox.Show("Please enter a message.");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            updateTextBoxColor();
         }
     }
 }

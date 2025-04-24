@@ -25,6 +25,12 @@ namespace ClientGUI_MultipleClientsChatTest
             InitializeComponent();
         }
 
+        private void updateTextBoxColor()
+        {
+            // Set the color of the TextBox to the selected color from the ColorDialog  
+            textBox1.ForeColor = colorDialog1.Color;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             mainList = new MainList();
@@ -44,12 +50,12 @@ namespace ClientGUI_MultipleClientsChatTest
 
             if (!string.IsNullOrEmpty(userMessage))
             {
-                byte[] messageSent = Encoding.UTF8.GetBytes("broadcast " + userMessage);
+                byte[] messageSent = Encoding.UTF8.GetBytes("broadcast " + userMessage + "§" + colorDialog1.Color.ToArgb());
                 int byteSent = Program.senderSocket.Send(messageSent);
                 textBox1.Clear();  // Clear the TextBox after sending the message  
 
                 richTextBox1.AppendText(Program.username + ": ", Color.Blue);
-                richTextBox1.AppendText(userMessage + "\n");
+                richTextBox1.AppendText(userMessage + "\n", colorDialog1.Color);
 
                 SoundTools.playIMSendSound();
 
@@ -71,6 +77,12 @@ namespace ClientGUI_MultipleClientsChatTest
             // Automatically scroll to the bottom  
             richTextBox1.SelectionStart = richTextBox1.Text.Length;
             richTextBox1.ScrollToCaret();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            colorDialog1.ShowDialog();
+            updateTextBoxColor();
         }
     }
 }
