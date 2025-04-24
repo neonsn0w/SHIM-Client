@@ -197,13 +197,17 @@ namespace ClientGUI_MultipleClientsChatTest
                         Thread.Sleep(100);
                         DMs[userInfo[0]].Invoke(new Action(() => DMs[userInfo[0]].richTextBox1.AppendText(userInfo[2] + ": ", Color.Red)));
                         DMs[userInfo[0]].Invoke(new Action(() => DMs[userInfo[0]].richTextBox1.AppendText(CryptoTools.Decrypt(Convert.FromBase64String(userInfo[1]), privateKey) + Environment.NewLine)));
-                        
+
+                        SoundTools.playIMRcvSound();
+
                     }
                     else if (message.StartsWith("brd "))
                     {
                         string[] data = message.Substring(4).Split('§');
                         chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(data[1] + ": ", Color.Red)));
                         chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(data[0] + Environment.NewLine)));
+
+                        SoundTools.playIMRcvSound();
                     }
 
                     else

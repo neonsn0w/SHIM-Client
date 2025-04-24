@@ -37,12 +37,14 @@ namespace ClientGUI_MultipleClientsChatTest
                 richTextBox1.AppendText(Program.username + ": ", Color.Blue);
                 richTextBox1.AppendText(userMessage + "\n");
 
-                if (userMessage.ToLower() == "exit")
+                SoundTools.playIMSendSound();
+
+                /* if (userMessage.ToLower() == "exit")
                 {
                     Program.senderSocket.Shutdown(SocketShutdown.Both);
                     Program.senderSocket.Close();
                     this.Close();
-                }
+                } */
             }
             else
             {

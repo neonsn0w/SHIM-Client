@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using System.Media;
+using System.IO;
 
 namespace ClientGUI_MultipleClientsChatTest
 {
@@ -27,10 +29,12 @@ namespace ClientGUI_MultipleClientsChatTest
         {
             mainList = new MainList();
             mainList.Show();
+            SoundTools.playLogonSound();
         }
 
         private void Form1_Close(object sender, FormClosingEventArgs e)
         {
+            SoundTools.playLogoffSound();
             Environment.Exit(0); 
         }
 
@@ -46,6 +50,8 @@ namespace ClientGUI_MultipleClientsChatTest
 
                 richTextBox1.AppendText(Program.username + ": ", Color.Blue);
                 richTextBox1.AppendText(userMessage + "\n");
+
+                SoundTools.playIMSendSound();
 
                 if (userMessage.ToLower() == "exit")
                 {
