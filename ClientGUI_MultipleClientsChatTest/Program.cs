@@ -16,7 +16,7 @@ namespace ClientGUI_MultipleClientsChatTest
     internal static class Program
     {
         public static Socket senderSocket;
-        private static Chat chat;
+        public static Chat chat;
         private static UsernameInput usernameInput;
 
         public static ConcurrentDictionarySerializer<string, string> serializer = new ConcurrentDictionarySerializer<string, string>();
@@ -91,10 +91,10 @@ namespace ClientGUI_MultipleClientsChatTest
                     readMessage(senderSocket);
 
                     // update the database  
-                    messageSent = Encoding.UTF8.GetBytes("updatedb");
+                    /*messageSent = Encoding.UTF8.GetBytes("updatedb");
                     byteSent = Program.senderSocket.Send(messageSent);
 
-                    readMessage(senderSocket);
+                    readMessage(senderSocket);*/
 
                     clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();

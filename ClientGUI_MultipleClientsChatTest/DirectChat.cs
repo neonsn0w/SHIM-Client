@@ -29,6 +29,13 @@ namespace ClientGUI_MultipleClientsChatTest
             label1.Text = username;
         }
 
+        private void DirectChat_Close(object sender, System.EventArgs e)
+        {
+            Program.DMs.TryRemove(publickey.Trim(), out _);
+            Program.directChatThreads.TryRemove(publickey, out _);
+            this.Dispose();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             string userMessage = textBox1.Text.Trim().Replace("§", "ss");  // Get the text from TextBox1  

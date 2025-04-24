@@ -19,6 +19,7 @@ namespace ClientGUI_MultipleClientsChatTest
     public partial class Chat : Form
     {
         public MainList mainList;
+        public BuddyList buddyList;
 
         public Chat()
         {
@@ -35,6 +36,10 @@ namespace ClientGUI_MultipleClientsChatTest
         {
             mainList = new MainList();
             mainList.Show();
+
+            buddyList = new BuddyList();
+            buddyList.Show();
+
             SoundTools.playLogonSound();
         }
 

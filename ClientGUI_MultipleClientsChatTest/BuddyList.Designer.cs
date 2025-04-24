@@ -55,6 +55,7 @@ namespace ClientGUI_MultipleClientsChatTest
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(357, 484);
             this.listBox1.TabIndex = 2;
+            this.listBox1.DoubleClick += new System.EventHandler(this.ListBox1_DoubleClick);
             // 
             // button1
             // 
@@ -64,6 +65,7 @@ namespace ClientGUI_MultipleClientsChatTest
             this.button1.TabIndex = 3;
             this.button1.Text = "Remove buddy";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // BuddyList
             // 

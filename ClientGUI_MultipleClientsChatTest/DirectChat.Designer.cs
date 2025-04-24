@@ -45,6 +45,7 @@ namespace ClientGUI_MultipleClientsChatTest
             this.richTextBox1.Font = new System.Drawing.Font("Times New Roman", 12F);
             this.richTextBox1.Location = new System.Drawing.Point(13, 78);
             this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(812, 435);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
@@ -109,6 +110,7 @@ namespace ClientGUI_MultipleClientsChatTest
             this.Controls.Add(this.richTextBox1);
             this.Name = "DirectChat";
             this.Text = "SHIM - DirectChat";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DirectChat_Close);
             this.Load += new System.EventHandler(this.DirectChat_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
