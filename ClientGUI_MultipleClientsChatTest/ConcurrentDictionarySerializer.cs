@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.IO;
 
 namespace ClientGUI_MultipleClientsChatTest
 {
-    public class ConcurrentDictionarySerializer<TKey, TValue> where TKey : notnull
+    public class ConcurrentDictionarySerializer<TKey, TValue>
     {
         public void SaveToFile(ConcurrentDictionary<TKey, TValue> dictionary, string filePath)
         {

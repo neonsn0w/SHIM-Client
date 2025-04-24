@@ -113,6 +113,9 @@
     <Compile Include="UsernameInput.Designer.cs">
       <DependentUpon>UsernameInput.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="BuddyList.resx">
+      <DependentUpon>BuddyList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Chat.resx">
       <DependentUpon>Chat.cs</DependentUpon>
     </EmbeddedResource>

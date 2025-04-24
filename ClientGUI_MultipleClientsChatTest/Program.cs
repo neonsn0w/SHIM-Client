@@ -19,8 +19,11 @@ namespace ClientGUI_MultipleClientsChatTest
         private static Chat chat;
         private static UsernameInput usernameInput;
 
+        public static ConcurrentDictionarySerializer<string, string> serializer = new ConcurrentDictionarySerializer<string, string>();
+
         // Format: publickey + username  
         public static ConcurrentDictionary<string, string> connectedUsers = new ConcurrentDictionary<string, string>();
+        public static ConcurrentDictionary<string, string> buddies = new ConcurrentDictionary<string, string>();
         public static ConcurrentDictionary<string, DirectChat> DMs = new ConcurrentDictionary<string, DirectChat>();
 
         // Thread pool for DirectChat threads  
@@ -42,6 +45,11 @@ namespace ClientGUI_MultipleClientsChatTest
         static void Main()
         {
             cryptographySetup();
+
+            if (File.Exists("buddies.json"))
+            {
+                buddies = serializer.LoadFromFile("buddies.json");
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
