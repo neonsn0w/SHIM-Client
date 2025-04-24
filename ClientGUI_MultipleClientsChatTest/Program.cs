@@ -36,11 +36,6 @@ namespace ClientGUI_MultipleClientsChatTest
 
         private static Thread clientThread;
 
-        // TODO: Check if this is necessary  
-        // This variable is used to check the keys have been just generated  
-        // and if it's necessary to send the public key to the server  
-        private static bool needSetup = false;
-
         [STAThread]
         static void Main()
         {
@@ -244,7 +239,6 @@ namespace ClientGUI_MultipleClientsChatTest
                 var x = CryptoTools.LoadKeys();
                 publicKey = x.publicKey;
                 privateKey = x.privateKey;
-                needSetup = true;
             }
             catch (Exception e)
             {
