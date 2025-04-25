@@ -58,8 +58,7 @@ namespace ClientGUI_MultipleClientsChatTest
 
             if (username.Trim() == "")
             {
-                // If the user didn't enter a username, we need to hurt his feelings  
-                MessageBox.Show("This username is ass. Session terminated.", "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a username.", "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
 
@@ -127,6 +126,8 @@ namespace ClientGUI_MultipleClientsChatTest
         {
             string[] users = serverResponse.Split('\n');
 
+            connectedUsers.Clear();
+
             foreach (string user in users)
             {
                 if (user.Trim() != "")
@@ -134,14 +135,13 @@ namespace ClientGUI_MultipleClientsChatTest
                     // Format: "username§publickey"  
                     string[] userInfo = user.Split('§');
 
-                    // If I uncomment this, I will https://learn.microsoft.com/en-us/windows-server/get-started/kms-client-activation-keys  
-                    /*if (userInfo[1] == publicKey)  
+                    if (userInfo[1].Trim() == publicKey.Trim())
                     {  
                         continue;  
-                    }*/
+                    }
 
                     // Format: publickey + username  
-                    connectedUsers.TryAdd(userInfo[1], userInfo[0]);
+                    connectedUsers.TryAdd(userInfo[1].Trim(), userInfo[0]);
                 }
             }
             chat.mainList.Invoke(new Action(() => chat.mainList.updateListBox()));

@@ -31,6 +31,7 @@ namespace ClientGUI_MultipleClientsChatTest
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DirectChat));
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -108,6 +109,9 @@ namespace ClientGUI_MultipleClientsChatTest
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.richTextBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "DirectChat";
             this.Text = "SHIM - DirectChat";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DirectChat_Close);

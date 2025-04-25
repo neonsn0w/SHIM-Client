@@ -31,6 +31,7 @@ namespace ClientGUI_MultipleClientsChatTest
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UsernameInput));
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -60,6 +61,9 @@ namespace ClientGUI_MultipleClientsChatTest
             this.ClientSize = new System.Drawing.Size(282, 77);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "UsernameInput";
             this.Text = "Enter you username...";
             this.ResumeLayout(false);

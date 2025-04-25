@@ -24,14 +24,11 @@ namespace ClientGUI_MultipleClientsChatTest
         {
             updateUsernames();
 
-            if (Program.buddies.Count != 0)
+            listBox1.Items.Clear();
+            foreach (var user in Program.buddies)
             {
-                listBox1.Items.Clear();
-                foreach (var user in Program.buddies)
-                {
-                    // Mi vergogno dei miei peccati...
-                    listBox1.Items.Add(user.Value + "\t\t\t\t\t" + user.Key);
-                }
+                // Mi vergogno dei miei peccati...
+                listBox1.Items.Add(user.Value + "\t\t\t\t\t" + user.Key);
             }
         }
 
@@ -77,6 +74,16 @@ namespace ClientGUI_MultipleClientsChatTest
             Program.buddies.TryRemove(data[1].Trim(), out _);
             Program.chat.buddyList.updateListBox();
             Program.serializer.SaveToFile(Program.buddies, "buddies.json");
+        }
+
+        // This makes the form only hide when the user clicks the X button
+        private void BuddyList_Close(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
         }
     }
 }

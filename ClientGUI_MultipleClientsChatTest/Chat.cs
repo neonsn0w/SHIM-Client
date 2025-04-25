@@ -89,5 +89,15 @@ namespace ClientGUI_MultipleClientsChatTest
             colorDialog1.ShowDialog();
             updateTextBoxColor();
         }
+
+        private void connectedUsersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mainList.Show();
+        }
+
+        private void buddyListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            buddyList.Show();
+        }
     }
 }
