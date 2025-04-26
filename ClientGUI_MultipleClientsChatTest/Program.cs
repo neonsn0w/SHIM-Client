@@ -67,9 +67,37 @@ namespace ClientGUI_MultipleClientsChatTest
 
             try
             {
-                IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
-                IPAddress ipAddr = ipHost.AddressList[0];
-                IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 11111);
+                IPAddress ipAddr;
+                if (File.Exists("address.txt"))
+                {
+                    string addressText = File.ReadAllText("address.txt").Trim();
+                    if (IPAddress.TryParse(addressText, out IPAddress parsedAddress))
+                    {
+                        ipAddr = parsedAddress;
+                    }
+                    else
+                    {
+                        IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+                        ipAddr = ipHost.AddressList[0];
+                    }
+                }
+                else
+                {
+                    IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+                    ipAddr = ipHost.AddressList[0];
+                }
+
+                int port = 11111; // Default port  
+                if (File.Exists("port.txt"))
+                {
+                    string portText = File.ReadAllText("port.txt").Trim();
+                    if (int.TryParse(portText, out int parsedPort) && parsedPort > 0 && parsedPort <= 65535)
+                    {
+                        port = parsedPort;
+                    }
+                }
+
+                IPEndPoint localEndPoint = new IPEndPoint(ipAddr, port);
 
                 senderSocket = new Socket(ipAddr.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
@@ -88,12 +116,6 @@ namespace ClientGUI_MultipleClientsChatTest
                     byteSent = Program.senderSocket.Send(messageSent);
 
                     readMessage(senderSocket);
-
-                    // update the database  
-                    /*messageSent = Encoding.UTF8.GetBytes("updatedb");
-                    byteSent = Program.senderSocket.Send(messageSent);
-
-                    readMessage(senderSocket);*/
 
                     clientThread = new Thread(() => readMessages(senderSocket));
                     clientThread.Start();
