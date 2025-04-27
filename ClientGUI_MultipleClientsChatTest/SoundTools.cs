@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace ClientGUI_MultipleClientsChatTest
             }
             catch (FileNotFoundException fne)
             {
-                Console.WriteLine("Sound file not found");
+                Program.logger.LogWarning("Sound file not found");
             }
         }
 
@@ -34,7 +35,7 @@ namespace ClientGUI_MultipleClientsChatTest
             }
             catch (FileNotFoundException fne)
             {
-                Console.WriteLine("Sound file not found");
+                Program.logger.LogWarning("Sound file not found");
             }
         }
 
@@ -48,7 +49,7 @@ namespace ClientGUI_MultipleClientsChatTest
             }
             catch (FileNotFoundException fne)
             {
-                Console.WriteLine("Sound file not found");
+                Program.logger.LogWarning("Sound file not found");
             }
         }
 
@@ -62,7 +63,7 @@ namespace ClientGUI_MultipleClientsChatTest
             }
             catch (FileNotFoundException fne)
             {
-                Console.WriteLine("Sound file not found");
+                Program.logger.LogWarning("Sound file not found");
             }
         }
     }

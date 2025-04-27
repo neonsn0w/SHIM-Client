@@ -11,10 +11,14 @@ using System.IO;
 using System.Collections.Concurrent;
 using System.Drawing;
 
+using Microsoft.Extensions.Logging;
+
 namespace ClientGUI_MultipleClientsChatTest
 {
     internal static class Program
     {
+        public static ILogger logger;
+
         public static Socket senderSocket;
         public static Chat chat;
         private static UsernameInput usernameInput;
@@ -29,7 +33,7 @@ namespace ClientGUI_MultipleClientsChatTest
         // Thread pool for DirectChat threads  
         public static ConcurrentDictionary<string, Thread> directChatThreads = new ConcurrentDictionary<string, Thread>();
 
-        public static string username = ""; // neonsn0w!  
+        public static string username = "";
 
         public static string publicKey;
         public static string privateKey;
@@ -39,6 +43,9 @@ namespace ClientGUI_MultipleClientsChatTest
         [STAThread]
         static void Main()
         {
+            ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+            logger = factory.CreateLogger("SHIM-Server");
+
             cryptographySetup();
 
             if (File.Exists("buddies.json"))
@@ -127,14 +134,14 @@ namespace ClientGUI_MultipleClientsChatTest
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    logger.LogError(ex.Message);
                     MessageBox.Show("FATAL ERROR, SHUTTING DOWN\n\n" + ex.Message, "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Environment.Exit(0);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                logger.LogError(ex.ToString());
             }
         }
 
@@ -178,14 +185,12 @@ namespace ClientGUI_MultipleClientsChatTest
             {
                 bytesRead = reader.Receive(buffer);
                 string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                // Console.WriteLine(message);  
-                // chat.richTextBox1.Invoke(new Action(() => chat.richTextBox1.AppendText(message + Environment.NewLine)));
 
                 return message;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                logger.LogError("Exception: " + e.Message);
                 return e.Message;
             }
         }
@@ -201,7 +206,7 @@ namespace ClientGUI_MultipleClientsChatTest
                 {
                     bytesRead = reader.Receive(buffer);
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine(message);
+                    logger.LogInformation(message);
                     if (message.StartsWith("§§§USERLIST§§§"))
                     {
                         updateUserList(message.Substring(14));
@@ -243,7 +248,7 @@ namespace ClientGUI_MultipleClientsChatTest
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                logger.LogError("Exception: " + e.Message);
             }
         }
 
@@ -257,6 +262,7 @@ namespace ClientGUI_MultipleClientsChatTest
             }
             catch (FileNotFoundException fne)
             {
+                logger.LogWarning("FileNotFoundException: " + fne.Message);
                 CryptoTools.GenerateAndSaveKeys();
                 var x = CryptoTools.LoadKeys();
                 publicKey = x.publicKey;
@@ -264,7 +270,7 @@ namespace ClientGUI_MultipleClientsChatTest
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                logger.LogError("Exception: " + e.Message);
                 MessageBox.Show("FATAL ERROR, SHUTTING DOWN\n\n" + e.Message, "SHIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(0);
             }

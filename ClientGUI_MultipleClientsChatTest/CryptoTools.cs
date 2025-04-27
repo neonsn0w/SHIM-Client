@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace ClientGUI_MultipleClientsChatTest
 {
@@ -27,7 +28,7 @@ namespace ClientGUI_MultipleClientsChatTest
                     File.WriteAllText(PublicKeyFile, publicKey);
                     File.WriteAllText(PrivateKeyFile, privateKey);
 
-                    Console.WriteLine("Keys generated and saved to files.");
+                    Program.logger.LogInformation("Keys generated and saved to files.");
                 }
                 finally
                 {
